@@ -65,10 +65,42 @@ function addRoomRequest(recordToInsert, callback) {
 function getAllRoomRequest(callback) {
     roomrequestDao.getAll(callback);
 }
+/////////////////////////////Room View////////////////////////////
+function getAllRooms(callback) {
+    floorDao.getAll(callback);
+}
+function checkAvailabilityforRooms(callback) {
+    roomTypeDao.getAll(callback);
+}
+
+// function getDetail(Id, callback) {
+//     guestHouseDao.getById(Id, callback);
+// }
+function getGuestHouseById(Id, callback) {
+    guestHouseDao.getById({_id:mongodb.ObjectID(Id)}, callback);
+}
+function saveEditedGuestHouse(id, detailsToUpdate, callback) {
+    guestHouseDao.updateById(id, detailsToUpdate, callback);
+}
+function saveEditedfloorsandRooms(id, detailsToUpdate, callback) {
+    floorDao.updateById(id, detailsToUpdate, callback);
+}
+function getFloorsandRoomDetails(Id, callback) {
+    floorDao.getById({_id:mongodb.ObjectID(Id)}, callback);
+}
+function updateGuestHouseFloorsandRooms(id, detailsToUpdate, callback) {
+    floorDao.updateById(id, detailsToUpdate, callback);
+}
 module.exports.updateGuestHouse = updateGuestHouse;
 module.exports.getAllGuestHouse = getAllGuestHouse;
 module.exports.createGuestHouse = createGuestHouse;
 module.exports.deleteGuestHouse = deleteGuestHouse;
+module.exports.saveEditedGuestHouse = saveEditedGuestHouse;
+module.exports.saveEditedfloorsandRooms = saveEditedfloorsandRooms;
+module.exports.getFloorsandRoomDetails = getFloorsandRoomDetails;
+module.exports.updateGuestHouseFloorsandRooms = updateGuestHouseFloorsandRooms;
+//module.exports.getDetail = getDetail;
+module.exports.getGuestHouseById = getGuestHouseById;
 module.exports.removeDirtyAttachment = removeDirtyAttachment;
 module.exports.createMasterData = createMasterData;
 module.exports.getAllMasterData = getAllMasterData;
@@ -85,3 +117,6 @@ module.exports.createFloorsandRooms = createFloorsandRooms;
 ////////////////ROOM REQUEST///////////////
 module.exports.addRoomRequest = addRoomRequest;
 module.exports.getAllRoomRequest = getAllRoomRequest;
+///////////////ROOM VIEW///////////////////
+module.exports.getAllRooms = getAllRooms;
+module.exports.checkAvailabilityforRooms = checkAvailabilityforRooms;

@@ -28,6 +28,8 @@
                                 files: [
                                     'bower_components/datatables.net-dt/css/jquery.dataTables.min.css',
                                     'bower_components/datatables.net/js/jquery.dataTables.min.js',
+                                    'bower_components/datatables.net/js/jquery.dataTables.min.js',
+                                    'bower_components/datatables.net-buttons/js/dataTables.buttons.min.js'
                                 ]
                             });
                         }]
@@ -53,12 +55,12 @@
                     }
                 })
                 .state('addGuesthouse', {
-                    url: '/addGuesthouse',
+                    url: '/addGuesthouse/:guestHouse',
                     templateUrl: 'app/modules/guestHouse/addGuesthouse.html',
                     controller: 'addGuesthouseCtrl',
                     params: {
-                        dataMode: "ADD",
-                        id: null
+                        detailsdataMode :"ADD",
+                        guestHouse: null
                     },
                     resolve: {
                         loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
@@ -83,6 +85,8 @@
                                     'bower_components/jquery-slimscroll/jquery.slimscroll.min.js',
                                     'bower_components/angular-ui-select/dist/select.min.css',
                                     'bower_components/angular-ui-select/dist/select.min.js',
+                                    'bower_components/datatables.net-dt/css/jquery.dataTables.min.css',
+                                    'bower_components/datatables.net/js/jquery.dataTables.min.js',
                                     // 'bower_components/dropzone/dist/dropzone.css',
                                     // 'bower_components/dropzone/dist/dropzone.js',
                                     // 'bower_components/ng-dropzone/dist/ng-dropzone.min.js',

@@ -2,11 +2,13 @@
     'use strict';
     var App = angular.module('app');
     App.controller('guestHouseMasterCtrl', guestHouseMasterCtrl);
-    guestHouseMasterCtrl.$inject = ['$scope', 'guestHouseMasterService'];
-    function guestHouseMasterCtrl($scope, guestHouseMasterService) {
+    guestHouseMasterCtrl.$inject = ['$scope', '$state','guestHouseMasterService','$stateParams'];
+    function guestHouseMasterCtrl($scope, $state, guestHouseMasterService, $stateParams) {
+        $scope.guestHouseId = $stateParams.guestHouse;
         $scope.newGuestHouse = {};
         $scope.guestHouseMasters = [];
         $scope.dataMode = "ADD";
+       // $scope.detailsdataMode="ADD";
         function loadInitialAllGuestHouse() {
             guestHouseMasterService.getAllGuestHouse(function (err, res) {
                 if (!err) {
@@ -23,9 +25,14 @@
                         return data._id == $scope.newGuestHouse._id;
                     });
                     $scope.guestHouseMasters[index] = $scope.newGuestHouse;
-                    //  $('#GuestHouseModal').modal('hide');
+                   
                 }
             });
+        }
+        $scope.editGuestHouse = function (guestHouse){
+            $scope.detailsdataMode="EDIT";
+            $state.go('addGuesthouse',{guestHouse:guestHouse});
+            $scope.guestHouse = JSON.parse(JSON.stringify(guestHouse));
         }
     }
     })();  

@@ -200,7 +200,7 @@ App.service('guestHouseMasterService', guestHouseMasterService);
         this.createFloorsandRooms = function (recordToInsert, callback) {
             var responsePromise = $http({
                 method: 'POST',
-                data: recordToInsert,
+                data: {recordToInsert : recordToInsert},
                 headers: { 'Content-Type': 'application/json' },
                 url: 'guestHouse/createFloorsandRooms'
             });
@@ -210,6 +210,7 @@ App.service('guestHouseMasterService', guestHouseMasterService);
                 callback(error, null);
             });
         }
+        
         ////////////////////////////ROOM REQUEST//////////////////////
         this.addRoomRequest = function (recordToInsert, callback) {
             var responsePromise = $http({
@@ -236,5 +237,126 @@ App.service('guestHouseMasterService', guestHouseMasterService);
                 callback(error, null);
             });
         }
+        ////////////////////////////////Room View//////////////
+        this.getAllRooms = function (callback) {
+            var responsePromise = $http({
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+                url: 'guestHouse/getAllRooms'
+            });
+            responsePromise.then(function (responseData) {
+                callback(null, responseData.data);
+            }, function (error) {
+                callback(error, null);
+            });
+        }
+        this.checkAvailabilityforRooms = function (callback) {
+            var responsePromise = $http({
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+                url: 'guestHouse/checkAvailabilityforRooms'
+            });
+            responsePromise.then(function (responseData) {
+                callback(null, responseData.data);
+            }, function (error) {
+                callback(error, null);
+            });
+        }
+        this.getGuestHouseDetails=function(guestHouseId, callback){
+            var responsePromise = $http({
+                method: 'get',
+                headers: { 'Content-Type': 'application/json' },
+                url: 'guestHouse/getDetail/' + guestHouseId
+            });
+             responsePromise.then(function (responseData){
+                callback(null, responseData.data);
+            }, function(error){
+                callback(error, null);
+            });
+        }
+    
+    this.getGuestHouseById = function (id, callback) {
+        var responsePromise = $http({
+            method: 'GET',
+           // data: JSON.stringify({ id: id}),
+            headers: { 'Content-Type': 'application/json' },
+            url: 'guestHouse/getById/' + id
+        });
+        responsePromise.then(function (responseData) {
+            callback(null, responseData.data);
+        }, function (error) {
+            callback(error, null);
+        });
+    };
+    
+    this.saveEditedGuestHouse = function (id, recordToEdit, callback) {
+        var responsePromise = $http({
+            method: 'PUT',
+            data: JSON.stringify({ id: id, recordToEdit: recordToEdit }),
+            headers: { 'Content-Type': 'application/json' },
+            url: 'guestHouse/saveEditedGuestHouse'
+        });
+        responsePromise.then(function (responseData) {
+            callback(null, responseData.data);
+        }, function (error) {
+            callback(error, null);
+        });
     }
+    this.saveEditedfloorsandRooms = function (id, recordToEdit, callback) {
+        var responsePromise = $http({
+            method: 'PUT',
+            data: JSON.stringify({ id: id, recordToEdit: recordToEdit }),
+            headers: { 'Content-Type': 'application/json' },
+            url: 'guestHouse/saveEditedFloorsandRooms'
+        });
+        responsePromise.then(function (responseData) {
+            callback(null, responseData.data);
+        }, function (error) {
+            callback(error, null);
+        });
+    }
+    this.getFloorsandRoomsById = function (id, callback) {
+        var responsePromise = $http({
+            method: 'GET',
+           // data: JSON.stringify({ id: id}),
+            headers: { 'Content-Type': 'application/json' },
+            url: 'guestHouse/getFloorById/' + id
+        });
+        responsePromise.then(function (responseData) {
+            callback(null, responseData.data);
+        }, function (error) {
+            callback(error, null);
+        });
+    };
+    this.updateGuestHouseFloorsandRooms = function (id, recordToEdit, callback) {
+        var responsePromise = $http({
+            method: 'PUT',
+            data: JSON.stringify({ id: id, recordToEdit: recordToEdit }),
+            headers: { 'Content-Type': 'application/json' },
+            url: 'guestHouse/updateGuestHouseFloorsandRooms'
+        });
+        responsePromise.then(function (responseData) {
+            callback(null, responseData.data);
+        }, function (error) {
+            callback(error, null);
+        });
+    }
+}
+
+    // this.editGuestHouseDetails=function(guestHouseId, details, callback){
+    //     var responsePromise = $http({
+    //         method: 'put',
+    //         data: JSON.stringify(details),
+    //         headers: { 'Content-Type': 'application/json' },
+    //         url: 'guestHouse/' + guestHouseId
+    //     });
+    //      responsePromise.then(function (response){
+             
+    //         callback(null, response);
+    //     }, function(error){
+    //         callback(error, null);
+    //     });
+    // }
+
+
 })();

@@ -215,7 +215,7 @@ router.get('/loadimg/:id/:originalname/:contentType/:contentType2', function (re
 
 ///////////////////////FLOORS AND ROOMS/////////////////////////
 router.post('/createFloorsandRooms', authService.verifyCallerWithKeycloak, function (req, res) {
-    guestHouseService.createFloorsandRooms(req.body, function (err, response) {
+    guestHouseService.createFloorsandRooms(req.body.recordToInsert, function (err, response) {
         if (!err) {
             res.send(response);
             //appLogger.info("success in creation");
@@ -251,5 +251,101 @@ router.get('/getAllRoomRequest', authService.verifyCallerWithKeycloak, function 
         }
     });
 });
+///////////////////////////////////Room View//////////////////////////
+router.get('/getAllRooms', authService.verifyCallerWithKeycloak, function (req, res) {
+    guestHouseService.getAllRooms(function (err, response) {
+        if (!err) {
+            res.send(response);
+            //appLogger.info("success in getallguesthouses")
+        }
+        else {
+            res.status(500).send(err);
+            appLogger.error("error",err)
+        }
+    });
+});
+router.get('/checkAvailabilityforRooms', authService.verifyCallerWithKeycloak, function (req, res) {
+    guestHouseService.checkAvailabilityforRooms(req.body, function (err, response) {
+        if (!err) {
+            res.send(response);
+            //appLogger.info("success in creation");
+        }
+        else {
+            res.status(500).send(err);
+            appLogger.error("error in creation ", err);
+        }
+    });
+});
+router.get('/getById/:id', authService.verifyCallerWithKeycloak,  function (req, res, next) {
+    var id = req.params.id;
+    guestHouseService.getGuestHouseById(id, function (err, response) {
+      if (!err) {
+          res.send(response);
+      }
+      else {
+        res.status(500).send(err);
+        appLogger.error("error in creation ", err);
+      }
+  });
+});
+router.put('/saveEditedGuestHouse', authService.verifyCallerWithKeycloak, function (req, res) {
+    guestHouseService.saveEditedGuestHouse(req.body.id, req.body.recordToEdit, function (err, response) {
+        if (!err) {
+            res.send(response);
+            //appLogger.info("success in updating");
+        }
+        else {
+            res.status(500).send(err);
+            appLogger.error("error in updating ", err);
+        }
+    });
+});
+router.put('/saveEditedfloorsandRooms', authService.verifyCallerWithKeycloak, function (req, res) {
+    guestHouseService.saveEditedfloorsandRooms(req.body.id, req.body.recordToEdit, function (err, response) {
+        if (!err) {
+            res.send(response);
+            //appLogger.info("success in updating");
+        }
+        else {
+            res.status(500).send(err);
+            appLogger.error("error in updating ", err);
+        }
+    });
+});
+router.get('/getFloorById/:id', authService.verifyCallerWithKeycloak,  function (req, res, next) {
+    var id = req.params.id;
+    guestHouseService.getFloorsandRoomDetails(id, function (err, response) {
+      if (!err) {
+          res.send(response);
+      }
+      else {
+        res.status(500).send(err);
+        appLogger.error("error in creation ", err);
+      }
+  });
+});
+router.put('/updateGuestHouseFloorsandRooms', authService.verifyCallerWithKeycloak, function (req, res) {
+    guestHouseService.updateGuestHouseFloorsandRooms(req.body.id, req.body.recordToEdit, function (err, response) {
+        if (!err) {
+            res.send(response);
+            //appLogger.info("success in updating");
+        }
+        else {
+            res.status(500).send(err);
+            appLogger.error("error in updating ", err);
+        }
+    });
+});
+
+// router.get('/getDetail/:guestHouseId', function (req, res, next) {
+//     guestHouseService.getDetail(req.params.guestHouseId, function (err, response) {
+//         if (!err) {
+//             res.send(response);
+//         }
+//         else {
+//             res.status(500).send(err);
+//         }
+//     });
+// });
 
 module.exports = router;

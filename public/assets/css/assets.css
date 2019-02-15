@@ -17,19 +17,28 @@
         background-color: #f1f1f1
 }
 
+ ul.facility-icon {
+    column-count: 3;
+    column-gap: 1rem;
+    margin:0;
+    padding:0;
+    list-style: none;
+}
+
 [class*="room-thumb-"] .room-size, [class*="room-thumb-list-"] .facility-icon li,
     {
-color: #2a2a2a
+color: #666
     }
  [class*="room-thumb-"] .per-night small {
          color: #a5a5a5
  }
 
 [class*="room-thumb-"] .room-info{
-    display: inline-block
+    display: inline-block;
+    max-height:350px;
 }
 [class*="room-thumb-"] .facility-icon li{
-    padding: 2px 5px;
+    padding: 2px 2px;
     margin: 1px 0;
 }
 [class*="room-thumb-"] .room-size{
@@ -37,21 +46,29 @@ color: #2a2a2a
     font-weight: 500
 }
 
-[class*="room-thumb-list-"] .facility-icon{
+/*[class*="room-thumb-list-"] .facility-icon{
     float: left;
     list-style: none;
     margin:0;
     padding:0;
-    display: table
+    display: table;
+    position: relative;
+    z-index: 999;
+    width: 140%;
+    overflow: hidden;
+
 }
 [class*="room-thumb-list-"] .facility-icon li {
     border: 0px solid #aaa;
-    margin-right: 4px;
-    float: left
+    margin-right: 6px;
+    float: left;
+    position: relative;
+    font-size: 13px;
+    font-weight: 600;
+    color: #000;
 }
-[class*="room-thumb-list-"] .facility-icon li:last-child{
-    margin-right: 0
-}
+*/
+
 [class*="room-thumb-list-"] .room-size {
     border: 1px solid transparent;
     float: left;
@@ -59,7 +76,7 @@ color: #2a2a2a
 }
 [class*="room-thumb-list-"] .per-night{
     text-align: center;
-    margin-bottom: 40px
+    margin-bottom: 25px
 }
 [class*="room-thumb-list-"] .for-booking{
     margin-left: -15px;
@@ -74,13 +91,19 @@ ul.facility-icon li i{
     margin-right: 2px;
     font-size: 1.2rem;
     line-height: 1.2rem;
+    color: #E11C63;
+}
+
+
+ul.facility-icon li:last-child:before{
+    display:none;
 }
 
 .room-thumb-list-2 .for-booking{
     height: 100%;
     border-left: none;
     margin-top: 0;
-    padding: 50px 0
+    padding: 30px 0 0;
 }
 .room-thumb .subtext,
 .room-info .subtext {
@@ -311,7 +334,7 @@ ul.facility-icon li i{
 }
 
 .gh-dropdown{
-    position: static;
+    position: static !important;
 }
 .gh-dropdown .dropdown-menu{
     border-radius: 0 !important;

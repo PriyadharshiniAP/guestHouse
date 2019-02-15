@@ -11,9 +11,9 @@
     <div class="element-wrapper">
         <h1 class="element-title">Guest House</h1>
         <div class="element-actions">
-            <a data-ui-sref="addGuesthouse({ state: 'Add' })" data-ui-sref-active="active" class="add btn btn-primary btn-sm">
-                <i class="icon-add push-5-r"></i> Add Guest House
-            </a>
+            <a data-ui-sref="addGuesthouse({ detailsdataMode: 'ADD' })" data-ui-sref-active="active" class="add btn btn-primary btn-sm">
+                <i class="icon-add push-5-r"></i> Add Guest House </a>
+           
             <!--<a class="add btn btn-primary btn-sm" data-ui-sref="guestHouse"  data-toggle="modal">
                 <i class="icon-add"></i>
                 <span>Add Guest House</span>
@@ -37,13 +37,15 @@
                     <tbody>
 
                         <tr ng-repeat="guestHouse in guestHouseMasters ">
-                            <td data-title="GuestHouseId">{{guestHouse.registerno}}</td>
+                            <td data-title="GuestHouseId" >{{guestHouse.registerno}}</td>
                             <td data-title="Guest House Name">{{guestHouse.guestHouse_Name}}</td>
+                                <!-- <a class="btn btn-primary-2 rounded-0 py-0" href="javascript:void(0)"    ng-click="editGuestHouse(guestHouse._id)"> -->
 
                             <td>
-                                <a class="btn btn-table btn-sm rounded-0 py-0" data-toggle="tab" data-ui-sref="addGuesthouse({dataMode:'Edit',id:guestHouse._id,})">
-                                    <i class="la la-edit"></i> Edit </a>
+                                <a class="btn btn-table btn-sm rounded-0 py-0"data-toggle="modal" data-ui-sref="addGuesthouse({detailsdataMode:'Edit',guestHouse:guestHouse._id})">  <i class="la la-edit"></i> Edit </a>
 
+                                    <!-- data-ui-sref="addGuesthouse({dataMode:'Edit' ,guestHouse:guestHouse._id})">
+                                    -->
                             </td>
                         </tr>
                     </tbody>

@@ -19,7 +19,8 @@
   </ol>
   <section class="content">
       <div class="element-wrapper mb-0">
-        <h1 class="element-title">Add Guesthouse</h1>
+        <h1 class="element-title" ng-if="detailsdataMode =='ADD'">Add Guesthouse</h1>
+        <h1 class="element-title" ng-if="detailsdataMode =='Edit'">Edit Guesthouse</h1>
         <!--<div class="element-actions"> <a class="btn btn-action btn-sm" href="#"> <i class="la la-plus-circle"></i> <span>Action
               Button</span> </a> </div>-->
       </div>
@@ -403,15 +404,17 @@
     
             </div>
             <div class="card-footer text-right">
-              <button type="submit" class="btn btn-success" ng-click="saveGuestHouse()"><i class="la la-floppy-o mr-2" ></i>Save</button>
+              <button type="submit" class="btn btn-success" ng-if="detailsdataMode=='ADD'" ng-click="saveGuestHouse()"><i class="la la-floppy-o mr-2" ></i>Save</button>
+              <button type="submit" class="btn btn-success" ng-if="detailsdataMode=='Edit'" ng-click="updateGuestHouseBasicInfo()"><i class="la la-floppy-o mr-2" ></i>Update</button>
+              
             </div>
           </div>
     
            <div class="tab-pane fade" id="room">
           <div class="table-container">
-            <div class="element-actions p-3 text-right"> <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addRoomType"><i class="la la-plus-circle mr-2"></i>Add Room Type</button></div>
+            <div class="element-actions p-3 text-right"> <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" href="javascript:void(0);" ng-click="setEnvironmentForAdd()"><i class="la la-plus-circle mr-2"></i>Add Room Type</button></div>
             <div class="table-body">
-              <table class="standard-table table-border">
+              <table id="dropouts-table"class="standard-table table-border datatable table">
                 <thead>
                   <tr>
                     <th class="sort ascending">Name</th>
@@ -432,14 +435,14 @@
                     <td data-title="Engine Version">{{rooms.tariff}}</td>
                     <td data-title="CSS Grade">{{rooms.datetime}}</td>
                     <td data-title="Action" class="action"><div class="input-group">
-                        <div class="input-group-append"><a class="btn btn-table btn-sm rounded-0 py-0" data-toggle="modal" ng-click="editRoomType(rooms)"> <i class="la la-edit" ></i> Edit </a> <a class="btn btn-table btn-sm rounded-0 py-0" ng-click="confirmModal(rooms._id)"> <i class="la la-trash"></i> Delete </a> <a class="more-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-ellipsis-v"></i> </a>
-                          <div class="dropdown-menu py-0" aria-labelledby="moduleversion">
+                        <div class="input-group-append"><a class="btn btn-table btn-sm rounded-0 py-0" data-toggle="modal" ng-click="editRoomType(rooms)"> <i class="la la-edit" ></i> Edit </a> <a class="btn btn-table btn-sm rounded-0 py-0" ng-click="confirmModal(rooms._id)"> <i class="la la-trash"></i> Delete </a> 
+                          <!-- <div class="dropdown-menu py-0" aria-labelledby="moduleversion">
                             <ul class="list-group my-0">
                               <li class="list-group-item"><a>Cras justo odio</a></li>
                               <li class="list-group-item"><a>Dapibus ac facilisis</a></li>
                               <li class="list-group-item"><a>Morbi leo risus</a></li>
                             </ul>
-                          </div>
+                          </div> -->
                         </div>
                       </div></td>
                   </tr>
@@ -447,10 +450,10 @@
               </table>
             </div>
             <div class="standard-table-footer">
-              <div class="row">
+              <!-- <div class="row">
                 <div class="col-sm-4">
                   <select class="per-page">
-                    <option>15</option>
+                    <option>5</option>
                   </select>
                   <span>per page</span> </div>
                 <div class="col-sm-8 text-right">
@@ -466,7 +469,7 @@
                     <button type="button" class="btn btn-outline-mauve btn-sm"><span class="la la-angle-double-right mr-0"></span></button>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
           <!--<div class="card-footer text-right">
@@ -493,7 +496,7 @@
                     <div class="row">
                       <div class="col-md-2 form-group">
                         <label class="required">Room Prefix</label>
-                        <input type="text" ng-model="new.roomPrefix0" ng-change="prefixVal();" class="form-control form-control-sm" />
+                        <input type="text" ng-model="new.roomPrefix[0]" ng-change="prefixVal();" class="form-control form-control-sm" />
                       </div>
                       <div class="col-md-2 form-group">
                         <label class="required">Number of Rooms</label>
@@ -502,16 +505,16 @@
                      
                       <div class="col-md-2 form-group">
                         <label class="required">Number of Digits</label>
-                        <input type="number" ng-model="new.numberDigit[0]" min="1" ng-change="roomNoDigit(0, new.numberDigit[0]);"  class="form-control form-control-sm" />
+                        <input type="number" ng-model="new.numberDigit[0]"  ng-change="roomNoDigit(0, new.numberDigit[0]);"  class="form-control form-control-sm" />
                       </div>
                       <div class="col-md-2 form-group">
                         <label class="required">Room Starting Number</label>
-                        <input type="number" ng-model="new.startingNumber[0]" min="1" ng-change="roomStartingNumber(0, new.startingNumber[0]);"  class="form-control form-control-sm" />
+                        <input type="number" ng-model="new.startingNumber[0]"  ng-change="roomStartingNumber(0, new.startingNumber[0]);"  class="form-control form-control-sm" />
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-12">
-                        <div class="room-list"  ng-repeat="room in roomCounts[0] track by $index"> <span class="room-details bg-success"> <strong>{{new.roomPrefix0}}</strong> {{roomNumber[0].room[$index]}} </span> <a class="edit-room" data-target="#editRoomModal" data-toggle="modal"><i class="la la-edit"></i></a> </div>
+                        <div class="room-list"  ng-repeat="room in roomCounts[0] track by $index"> <span class="room-details bg-success"> <strong>{{new.roomPrefix[0]}}</strong> {{new.roomNumber[0].room[$index]}} </span> <a class="edit-room" data-target="#editRoomModal" data-toggle="modal"><i class="la la-edit"></i></a> </div>
                       </div>
                     </div>
                   </div>
@@ -535,7 +538,7 @@
                       
                       <div class="col-md-2 form-group">
                         <label class="required">Number of Digits</label>
-                        <input type="number" min="1" ng-model="new.numberDigit[sectionIndex]" ng-change="roomNoDigit(sectionIndex, new.numberDigit[sectionIndex]);"  class="form-control form-control-sm" />
+                        <input type="number" min="1" ng-model="new.numberDigit[sectionIndex]" ng-change="roomNoDigit(sectionIndex,new.numberDigit[sectionIndex]);"  class="form-control form-control-sm" />
                       </div>
                       <div class="col-md-2 form-group">
                         <label class="required">Room Starting Number</label>
@@ -544,13 +547,12 @@
                     </div>
                     <div class="row">
                       <div class="col-12">
-                        <div class="room-list"  ng-repeat="room in roomCounts[sectionIndex] track by $index"> <span class="room-details bg-success"> <strong>{{new.roomPrefix[sectionIndex]}}</strong> {{roomNumber[sectionIndex].room[$index]}} </span> <a class="edit-room" data-target="#editRoomModal" data-toggle="modal"><i class="la la-edit"></i></a> </div>
+                        <div class="room-list"  ng-repeat="room in roomCounts[sectionIndex] track by $index"> <span class="room-details bg-success"> <strong>{{new.roomPrefix[sectionIndex]}}</strong> {{new.roomNumber[sectionIndex].room[$index]}} </span> <a class="edit-room" data-target="#editRoomModal" data-toggle="modal"><i class="la la-edit"></i></a> </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-       
               
               <!-- <div class="card">
                 <div class="card-header" id="headingTwo"><h5><a class="collapsed"  data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Collapsible Group Item #2</a>
@@ -572,7 +574,8 @@
           </div>
           <div class="card-footer text-right">
             <button type="reset" class="btn btn-secondary mr-2">Cancel</button>
-            <button type="submit" class="btn btn-success" ng-click="saveFloorsandRooms()"><i class="la la-floppy-o mr-2"></i>Save</button>
+            <button type="submit" class="btn btn-success" ng-if = "detailsdataMode=='ADD'"ng-click="saveFloorsandRooms();"><i class="la la-floppy-o mr-2"></i>Save</button>
+            <button type="submit" class="btn btn-success" ng-if = "detailsdataMode=='Edit'"ng-click="editGuestHouseFloorsandRooms();"><i class="la la-floppy-o mr-2"></i>Update</button>
           </div>
         </div>
       </div>
@@ -589,10 +592,10 @@
           <div class="row">
             <div class="col-12">
               <form>
-                <div class="row">
-                  <div class="col-md-6 form-group" >
-                    <label>Room Number</label>
-                    <input type="text" value="{{roomNumber[0].room[$index]}}"class="form-control form-control-sm" />
+                <div class="row" >
+                  <div class="col-md-6 form-group">
+                    <label >Room Number</label>
+                    <input type="text" class="form-control form-control-sm" />
                   </div>
                   <div class="col-md-6 form-group">
                     <label>Room Type</label>
@@ -636,11 +639,11 @@
           <div class="row">
             <div class="col-md-4 form-group">
               <label class="required" for="roomType">Room Type Name</label>
-              <input type="text" ng-model="newRoomType.roomname"class="form-control form-control-sm" id="roomType"/>
+              <input type="text" ng-model="newGuestHouse.roomname"class="form-control form-control-sm" id="roomType"/>
             </div>
             <div class="col-md-8 form-group">
               <label for="facilities" class="required">Facilities</label>
-              <ui-select multiple ng-model="newRoomType.facilities" close-on-select="false">
+              <ui-select multiple ng-model="newGuestHouse.facilities" close-on-select="false">
                 <ui-select-match placeholder="Select">{{$item}}</ui-select-match>
                 <ui-select-choices repeat="list in (facility | filter: $select.search)">
                   <div ng-bind-html="list | highlight: $select.search"></div>
@@ -652,34 +655,34 @@
             <div class="col-md-4 form-group">
               <label for="Occupancy" class="required">Occupancy</label>
               <div class="input-group">
-                <input type="text" ng-model="newRoomType.adult"class="form-control form-control-sm" placeholder="Adults" id="Occupancy" />
-                <input type="text" ng-model="newRoomType.Children" class="form-control form-control-sm" placeholder="Children" id="Occupancy" />
+                <input type="text" ng-model="newGuestHouse.adult"class="form-control form-control-sm" placeholder="Adults" id="Occupancy" />
+                <input type="text" ng-model="newGuestHouse.Children" class="form-control form-control-sm" placeholder="Children" id="Occupancy" />
               </div>
             </div>
             <div class="col-md-4 form-group">
               <label for="tariff" class="required">Tariff</label>
               <div class="input-group input-group-sm">
                 <div class="input-group-prepend text-center"> <span class="input-group-text font-weight-bold justify-content-center">&#8377</span> </div>
-                <input type="text" ng-model="newRoomType.tariff"class="form-control form-control-sm" id="tariff"/>
+                <input type="text" ng-model="newGuestHouse.tariff"class="form-control form-control-sm" id="tariff"/>
               </div>
             </div>
             <div class="col-md-4 form-group">
               <label for="date"class="required">Tariff Effective Date</label>
               <div class="column">
-                <input class="form-control form-control-sm" placeholder="DD/MM/YYYY" id="date"ng-flatpickr fp-opts="dateOpts1" ng-model="newRoomType.datetime">
+                <input class="form-control form-control-sm" placeholder="DD/MM/YYYY" id="date"ng-flatpickr fp-opts="dateOpts1" ng-model="newGuestHouse.datetime">
                 <span class="calender-caret"></span> </div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-4 form-group">
               <label for="shortDescription">Short Description</label>
-              <textarea rows="4" ng-model="newRoomType.description"id="shortDescription"class="form-control form-control-sm"></textarea>
+              <textarea rows="4" ng-model="newGuestHouse.description"id="shortDescription"class="form-control form-control-sm"></textarea>
             </div>
             <div class="col-md-8 form-group">
               <label>Add Images</label>
               <div class="column">
                   <div class="dropzone dropzone-formcontroll-lg" options="roomTypeImage.dzOptions" callbacks="roomTypeImage.dzCallbacks" methods="roomTypeImage.dzMethods"
-                   ng-dropzone style="min-height:7.5rem" ng-model="newRoomType.roomTypeImage"></div>
+                   ng-dropzone style="min-height:7.5rem"></div>
               </div>
             </div>
           </div>
@@ -687,7 +690,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           <button type="button" ng-click="saveRoomType()"ng-if="dataMode == 'ADD'" class="btn btn-primary">Save</button>
-          <button type="button" ng-click="updateRoomType(newRoomType)"ng-if="dataMode == 'EDIT'" class="btn btn-primary">Update</button>
+          <button type="button" ng-click="updateRoomType(rooms)"ng-if="dataMode == 'EDIT'" class="btn btn-primary">Update</button>
         </div>
       </div>
     </div>
