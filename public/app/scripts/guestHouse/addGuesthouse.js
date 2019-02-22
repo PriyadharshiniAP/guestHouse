@@ -342,6 +342,7 @@
             return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
         }
         $scope.roomNoDigit = function (index) {
+            // COMMENTED
             var digit = $scope.newfloor.roomNumber[index].room.length
             for (i = 0; i < digit && digit != 0; i++) {
                 $scope.newfloor.roomNumber[index].room[i] = { "roomId": pad(parseInt($scope.newfloor.startingNumber[index]) + parseInt(i), parseInt($scope.newfloor.numberDigit[index]), 0) }
