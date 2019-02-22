@@ -13,6 +13,7 @@ if (config.maintenanceMode) {
   });
 }
 
+// 
 if (config.behindHttps) {
   app.use(function (req, res, next) {
     if ((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
