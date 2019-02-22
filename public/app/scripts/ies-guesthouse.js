@@ -55,7 +55,7 @@
                     }
                 })
                 .state('addGuesthouse', {
-                    url: '/addGuesthouse/:guestHouse',
+                    url: '/:detailsdataMode/addGuesthouse/:guestHouse',
                     templateUrl: 'app/modules/guestHouse/addGuesthouse.html',
                     controller: 'addGuesthouseCtrl',
                     params: {

@@ -5,8 +5,6 @@
 App.service('guestHouseMasterService', guestHouseMasterService);
     guestHouseMasterService.$inject = ["$http", "$rootScope"];
     function guestHouseMasterService($http, $rootScope) {
-       
-
         
         this.getAllGuestHouse = function (callback) {
             var responsePromise = $http({
@@ -20,6 +18,19 @@ App.service('guestHouseMasterService', guestHouseMasterService);
                 callback(error, null);
             });
         }
+        this.getSelectedRoomTypes = function (id,callback) {
+            var responsePromise = $http({
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+                url: 'guestHouse/getSelectedRoomTypes/'+id
+            });
+            responsePromise.then(function (responseData) {
+                callback(null, responseData.data);
+            }, function (error) {
+                callback(error, null);
+            });
+        }
+        
         this.createGuestHouse = function (recordToInsert, callback) {
             var responsePromise = $http({
                 method: 'POST',
@@ -334,6 +345,18 @@ App.service('guestHouseMasterService', guestHouseMasterService);
             data: JSON.stringify({ id: id, recordToEdit: recordToEdit }),
             headers: { 'Content-Type': 'application/json' },
             url: 'guestHouse/updateGuestHouseFloorsandRooms'
+        });
+        responsePromise.then(function (responseData) {
+            callback(null, responseData.data);
+        }, function (error) {
+            callback(error, null);
+        });
+    }
+    this.getAllFloorsandRooms = function (callback) {
+        var responsePromise = $http({
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            url: 'guestHouse/getAllFloorsandRooms'
         });
         responsePromise.then(function (responseData) {
             callback(null, responseData.data);

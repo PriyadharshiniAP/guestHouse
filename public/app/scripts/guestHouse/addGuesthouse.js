@@ -4,33 +4,61 @@
     App.controller('addGuesthouseCtrl', addGuesthouseCtrl);
     addGuesthouseCtrl.$inject = ['$scope', '$rootScope', 'guestHouseMasterService', '$stateParams', '$timeout'];
     function addGuesthouseCtrl($scope, $rootScope, guestHouseMasterService, $stateParams, $timeout) {
-        //$scope.guestid=$stateParams.guest;
-        //console.log($stateParams.detailsdataMode);
         $scope.guestHouseId = $stateParams.guestHouse;
         $scope.newGuestHouse = {};
         $scope.guestHouse = [];
         $scope.guestHouseMasters = [];
-        $scope.new = {};
+        $scope.newfloor = {};
         $scope.detailsdataMode = $stateParams.detailsdataMode;
-        $scope.getGuestHouseDetails = function () {
-            guestHouseMasterService.getGuestHouseById($scope.guestHouseId, function (err, res) {
-                if (!err) {
-                    $scope.newGuestHouse = res;
-
-                }
-            });
+        // edit mode
+        if ($scope.detailsdataMode == 'Edit') {
+            // $scope.n = "5c6527466648f8569cede9ba";
+            //get all floors and rooms details for edit 
+            $scope.getFloorsandRoomDetails = function () {
+                guestHouseMasterService.getFloorsandRoomsById($scope.n, function (err, res) {
+                    if (!err) {
+                        $scope.new = res;
+                        //var i=0;
+                        //console.log($scope.new.roomNumber.length);
+                    }
+                });
+            }
+            $scope.getFloorsandRoomDetails();
+            //get all guest house details by guesthouseID for edit
+            $scope.getGuestHouseDetails = function () {
+                guestHouseMasterService.getGuestHouseById($scope.guestHouseId, function (err, res) {
+                    if (!err) {
+                        $scope.newGuestHouse = res;
+                    }
+                });
+            }
+            $scope.getGuestHouseDetails();
+            $scope.loadInitialRoomType = function (id) {
+                guestHouseMasterService.getSelectedRoomTypes(id, function (err, res) {
+                    if (!err) {
+                        $scope.roomType = res;
+                        $('#dropouts-table').DataTable().clear();
+                        $('#dropouts-table').DataTable().destroy();
+                        $timeout(function () {
+                            $('#dropouts-table').DataTable({
+                                "aoColumnDefs": [{ "bSortable": false, "aTargets": [0] }]
+                            });
+                        }, 50);
+                    }
+                })
+            }
         }
-        $scope.getGuestHouseDetails();
-       // $scope.n  ="5c656114ee5482a2c006c333";
-        $scope.getFloorsandRoomDetails = function () {
-            guestHouseMasterService.getFloorsandRoomsById($scope.guestHouseId, function (err, res) {
+        //save basic information of guest house
+        $scope.enableEditRoomDetails = false;
+        $scope.saveGuestHouse = function () {
+            guestHouseMasterService.createGuestHouse($scope.newGuestHouse, function (err, res) {
                 if (!err) {
-                    $scope.new = res;
-
+                    $scope.guestHouse = res;
+                    $scope.enableEditRoomDetails = true;
                 }
-            });
+            })
         }
-        $scope.getFloorsandRoomDetails();
+        //update basic information of guest house
         $scope.updateGuestHouseBasicInfo = function () {
             delete $scope.newGuestHouse.$$hashKey
             guestHouseMasterService.saveEditedGuestHouse($scope.newGuestHouse._id, $scope.newGuestHouse, function (err, res) {
@@ -39,64 +67,13 @@
                         return data._id == $scope.newGuestHouse._id;
                     });
                     $scope.guestHouseMasters[index] = $scope.newGuestHouse;
-
                 }
             });
         }
-        $scope.news = [];
-        $scope.editGuestHouseFloorsandRooms = function () {
-            $scope.new['guestHouseId'] = $scope.guestHouseId;
-            guestHouseMasterService.updateGuestHouseFloorsandRooms($scope.new_id,$scope.new, function (err, res) {
-              if (!err) {
-                var index = $scope.news.findIndex(function (data) {
-                    return data._id == $scope.new._id;
-                });
-                $scope.news[index] = $scope.new;
-
-
-                }
-            });
-        }
-        $scope.saveGuestHouse = function () {
-            guestHouseMasterService.createGuestHouse($scope.newGuestHouse, function (err, res) {
-                if (!err) {
-                    $scope.guestHouse.push($scope.newGuestHouse);
-
-                }
-            })
-        }
-        // $scope.editGuestHouse = function (guestHouse) {
-
-        //     $scope.newGuestHouse = JSON.parse(JSON.stringify(guestHouse));
-        // }
-            // $scope.updateGuestHouseFloorsandRooms = function () {
-            //     $scope.new['guestHouseId'] = $scope.guestHouseId;
-            //     guestHouseMasterService.createFloorsandRooms($scope.new, function (err, res) {
-                  
-            //         if (!err) {
-            //             $scope.news.push(res);
-            //             //console.log(res);
-    
-            //         }
-            //     });
-            // delete $scope.newGuestHouse.$$hashKey
-            // guestHouseMasterService.saveEditedfloorsandRooms($scope.newGuestHouse._id, $scope.new, function (err, res) {
-            //     if (!err) {
-            //         $scope.newGuestHouse = $scope.new.newGuestHouse;
-            //         // var index = $scope.guestHouseMasters.findIndex(function (data) {
-            //         //     return data._id == $scope.newGuestHouse._id;
-            //         // });
-            //         $scope.guestHouseMasters[index] = $scope.newGuestHouse;
-
-            //     }
-            // });
-        
-
         //$scope.newRoomType = {};
         $scope.roomType = [];
         $scope.facility = ['AC', 'TV', 'Free Wifi', 'Kitchen', 'In-house Restaurant', 'Parking Facility', 'Card Payment', 'Power backup', 'Conference Room', 'Banquet Hall', 'CCTV Cameras', 'Dining Area', 'Elevator', 'Swimming Pool', 'Hot Water', 'Bar', 'Wheelchair Accessible', 'Room Heater', 'In Room Safe', 'Mini Fridge', 'Complimentary Breakfast', 'Gym', 'Hair Dryer', 'Laundry', 'Pet Friendly', 'HDTV', 'Spa', 'Wellness Center', 'Electricity', 'Bath Tub', 'Netflix', 'Kindle', 'Coffee Tea Maker', 'Sofa Set', 'Jacuzzi', 'Full Length Mirrror', 'Balcony', 'King Bed', 'Queen Bed', 'Single Bed', 'Intercom', 'Sufficient Room Size', 'Sufficient Washroom'];
         $scope.dataMode = "ADD";
-
         $scope.imageAttachment = {
             dzOptions: {
                 url: "guestHouse/file/upload",
@@ -174,7 +151,6 @@
                 }
             })
         }
-       
         //Room Type
         $scope.dateOpts1 = {
             dateFormat: 'd-m-Y',
@@ -270,10 +246,9 @@
             disable: ["18/01/2019", "22/01/2019", "30/01/2019"]
         }
         $scope.city = ['Coimbatore', 'Karur', 'Tiruppur', 'Madurai', 'Salem'];
-
         $scope.state = ['Tamil Nadu', 'Andhra Pradesh', 'Bihar', 'Haryana', 'Manipur'];
-        function loadInitialRoomType() {
-            guestHouseMasterService.getAllRoomTypes(function (err, res) {
+        $scope.loadInitialRoomType = function (id) {
+            guestHouseMasterService.getSelectedRoomTypes(id, function (err, res) {
                 if (!err) {
                     $scope.roomType = res;
                     $('#dropouts-table').DataTable().clear();
@@ -283,23 +258,25 @@
                             "aoColumnDefs": [{ "bSortable": false, "aTargets": [0] }]
                         });
                     }, 50);
-
                 }
             })
         }
-        loadInitialRoomType();
-        $scope.saveRoomType = function () {
+        $scope.saveRoomType = function (guesthouse) {
+            console.log(guesthouse)
+
             $scope.dataMode = "ADD";
+            $scope.newGuestHouse['guestHouseId'] = guesthouse;
+           // $scope.newGuestHouse= guesthouse;
             //$scope.newGuestHouse = {};
             $('#addRoomType').modal("hide");
             guestHouseMasterService.createRoomType($scope.newGuestHouse, function (err, res) {
                 if (!err) {
-                    $scope.roomType.push($scope.newGuestHouse);
+                    $scope.roomType = res;
                 }
             })
         }
         $scope.setEnvironmentForAdd = function () {
-            $scope.newGuestHouse = {};
+            $scope.newGuestHouse = {};           
             $scope.dataMode = "ADD";
             $("#addRoomType").modal({ backdrop: 'static', keyboard: false });
         }
@@ -307,7 +284,6 @@
             $scope.dataMode = "EDIT";
             $('#addRoomType').modal("show");
             $scope.newGuestHouse = JSON.parse(JSON.stringify(rooms));
-
         }
         $scope.updateRoomType = function () {
             delete $scope.newGuestHouse.$$hashKey
@@ -324,7 +300,6 @@
         $scope.removeRoomType = function (index) {
             $scope.newGuestHouse.splice(index, 1);
         }
-
         $scope.confirmModal = function (index) {
             $("#confirmModal").modal("show");
             $scope.deleteIndex = index;
@@ -336,30 +311,29 @@
             $scope.roomType.splice($scope.deleteIndex, 1);
             $("#confirmModal").modal('hide');
         }
-
         ///////////FLOORS AND ROOMS//////////////
-        $scope.new = {};
         var i = 0;
-        $scope.new.startingNumber = [];
-        $scope.new.numberDigit = [];
-        $scope.new.roomNumber = [];
+        $scope.newfloor.startingNumber = [];
+        $scope.newfloor.numberDigit = [];
+        $scope.newfloor.roomNumber = [];
         $scope.roomCounts = [];
         $scope.roomCount = function (index, count) {
             $scope.roomCounts[index] = [];
-            //$scope.newGuestHouse = {};
-            $scope.new.roomNumber[index] = {};
-            $scope.new.roomNumber[index].room = [];
+            $scope.newfloor.roomNumber[index] = {};
+            $scope.newfloor.roomNumber[index].room = [];
             for (i = 0; i < count; i++) {
                 $scope.roomCounts[index].push(i);
-                $scope.new.roomNumber[index].room.push(i);
-                $scope.new.roomNumber[index].room[i] = i + 1;
-            }
+                //console.log($scope.roomCounts[index])
+                $scope.newfloor.roomNumber[index].room.push(i + 1);
+                //console.log($scope.newfloor.roomNumber[index])
+                // $scope.newfloor.roomNumber[index].room[i] = i+1;
 
-            //alert( $scope.roomNumber[index].room.length)
-            $scope.new.startingNumber[index] = 1;
-            $scope.new.numberDigit[index] = 1;
+            }
+            console.log($scope.newfloor)
+            $scope.newfloor.startingNumber[index] = 1;
+            $scope.newfloor.numberDigit[index] = 1;
             $scope.roomNoDigit(index);
-            $scope.roomStartingNumber(index);
+            // $scope.roomStartingNumber(index);
         }
 
         function pad(n, width, z) {
@@ -368,51 +342,48 @@
             return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
         }
         $scope.roomNoDigit = function (index) {
-            //   $scope.createRoom= {};
-            var digit = $scope.new.roomNumber[index].room.length
+            var digit = $scope.newfloor.roomNumber[index].room.length
             for (i = 0; i < digit && digit != 0; i++) {
-                $scope.new.roomNumber[index].room[i] = pad(parseInt($scope.new.startingNumber[index]) + parseInt(i), parseInt($scope.new.numberDigit[index]), 0)
+                $scope.newfloor.roomNumber[index].room[i] = { "roomId": pad(parseInt($scope.newfloor.startingNumber[index]) + parseInt(i), parseInt($scope.newfloor.numberDigit[index]), 0) }
+                //console.log($scope.newfloor.roomNumber[index])
             }
         }
-        $scope.roomStartingNumber = function (index) {
-            // $scope.createRoom= {};
-            var number = $scope.new.roomNumber[index].room.length;
-            for (i = 0; i < number && number != 0; i++) {
-                $scope.new.roomNumber[index].room[i] = pad(parseInt($scope.new.startingNumber[index]) + parseInt(i), parseInt($scope.new.numberDigit[index]), 0)
-            }
-        }
+
+        // $scope.roomStartingNumber = function (index) {
+        //     //console.log($scope.newfloor.roomNumber[index])
+        //     var number = $scope.newfloor.roomNumber[index].room.length;
+        //     for (i = 0; i < number && number != 0; i++) {
+        //         $scope.newfloor.roomNumber[index].room[i] = pad(parseInt($scope.newfloor.startingNumber[index]) + parseInt(i), parseInt($scope.newfloor.numberDigit[index]), 0)
+
+
+        //     }
+        // }
+
 
         //Add New Floor
         $scope.floors = [];
         $scope.addNewFloor = function () { //Add
+
             var itemIndex = 0;
             if ($scope.floors.length) {
                 itemIndex = ($scope.floors[$scope.floors.length - 1].itemIndex) + 1;
             }
             $scope.floors.push({ itemIndex: itemIndex })
-            // console.log( $scope.floors);
+            console.log($scope.floors);
         }
-
         $scope.floorsandrooms = [];
-        var details = $scope.new;
+        var details = $scope.newfloor;
         $scope.saveFloorsandRooms = function () {
-            guestHouseMasterService.createFloofrsandRooms(details, function (err, res) {
+            guestHouseMasterService.createFloorsandRooms(details, function (err, res) {
                 if (!err) {
 
-                    $scope.floorsandrooms.push(details);
+                    $scope.newfloor.floorsandrooms.push(details);
 
                 }
             })
         }
     }
+
 })();
- //Dropzone
-        //  $scope.dzOptions = {
-        //     url : '/alt_upload_url',
-        //     thumbnail: false,
-        //     acceptedFiles : 'image/jpeg, images/jpg, image/png',
-        //     addRemoveLinks : true,
-        //     dictDefaultMessage : 'Click to add or drop photos',
-        //     autoProcessQueue : false
-        // };
+
 

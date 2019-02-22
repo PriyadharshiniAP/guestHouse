@@ -162,6 +162,19 @@ router.get('/getAllRoomTypes', authService.verifyCallerWithKeycloak, function (r
         }
     });
 });
+router.get('/getSelectedRoomTypes/:id', authService.verifyCallerWithKeycloak, function (req, res) {
+    guestHouseService.getSelectedRoomTypes(req.params.id,function (err, response) {
+        if (!err) {
+            res.send(response);
+            //appLogger.info("success in getallguesthouses");
+        }
+        else {
+            res.status(500).send(err);
+            appLogger.error("error",err)
+        }
+    });
+});
+
 router.put('/updateRoomType', authService.verifyCallerWithKeycloak, function (req, res) {
     guestHouseService.updateRoomType(req.body.id, req.body.recordToEdit, function (err, response) {
         if (!err) {
@@ -333,6 +346,18 @@ router.put('/updateGuestHouseFloorsandRooms', authService.verifyCallerWithKeyclo
         else {
             res.status(500).send(err);
             appLogger.error("error in updating ", err);
+        }
+    });
+});
+router.get('/getAllFloorsandRooms', authService.verifyCallerWithKeycloak, function (req, res) {
+    guestHouseService.getAllFloorsandRooms(function (err, response) {
+        if (!err) {
+            res.send(response);
+            //appLogger.info("success in getallguesthouses")
+        }
+        else {
+            res.status(500).send(err);
+            appLogger.error("error in getallguesthouses",err)
         }
     });
 });
